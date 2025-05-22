@@ -36,22 +36,32 @@ submitBtn.addEventListener("click", async () =>{
     });
 
 setTimeout(() => {
-        const qrImage = container.querySelector("canvas") || container.querySelector("img");
-        if (!qrImage) return;
+    const qrImage = container.querySelector("canvas") || container.querySelector("img");
+    if (!qrImage) return;
 
-        const src = qrImage.toDataURL("image/png");
-        downloadBtn.href = src;
+    let src;
+    if (qrImage.tagName.toLowerCase() === "canvas") {
+        src = qrImage.toDataURL("image/png");
+    } else {
+        src = qrImage.src;
+    }
 
-        let userValue = userInput.value;
-        try {
-            userValue = new URL(userValue).hostname;
-        } catch (_) {
-            userValue = inputFormatter(userValue);
-        }
+    downloadBtn.href = src;
 
-        downloadBtn.download = `${userValue}QR`;
-        downloadBtn.classList.remove("hide");
-    }, 300);
+    let userValue = userInput.value;
+    try {
+        userValue = new URL(userValue).hostname;
+    } catch (_) {
+        userValue = inputFormatter(userValue);
+    }
+
+    const cleanFileName = userValue.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+    downloadBtn.download = `${cleanFileName}_QR.png`;
+
+    downloadBtn.classList.remove("hide");
+}, 300);
+
 });
 
 userInput.addEventListener("input",() => {
