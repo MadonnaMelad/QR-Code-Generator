@@ -5,7 +5,10 @@ const downloadBtn = document.getElementById("download");
 const sizeOptions = document.querySelector(".sizeOptions");
 const BGColor = document.getElementById("BGColor");
 const FGColor = document.getElementById("FGColor");
-let sizeChoice, BGColorChoice, FGColorChoice;
+const qrForm = document.getElementById("qrForm");
+let sizeChoice = sizeOptions.value;
+let BGColorChoice = BGColor.value;
+let FGColorChoice = FGColor.value;
 
 
 sizeOptions.addEventListener("change",()=>{
@@ -25,7 +28,8 @@ const inputFormatter = (value) =>{
     return value;
 }
 
-submitBtn.addEventListener("click", async () =>{
+qrForm.addEventListener("submit", async (e) =>{
+    e.preventDefault();
     container.innerHTML = "";
     new QRCode(container, {
         text: userInput.value,
@@ -74,13 +78,14 @@ userInput.addEventListener("input",() => {
     }
 });
 
-window.onload = () =>{
-    container.innerHTML = "";
-    sizeChoice = 100;
-    sizeOptions.value = 100;
-    userInput.value = "";
-    BGColor.value = BGColorChoice = "#ffffff";
-    FGColor.value = FGColorChoice = "#377dff";
+const resetForm = () => {
+    qrForm.reset();
+    sizeChoice = sizeOptions.value;
+    BGColorChoice = BGColor.value;
+    FGColorChoice = FGColor.value;
     downloadBtn.classList.add("hide");
     submitBtn.disabled = true;
+    container.innerHTML = "";
 };
+
+resetForm();
